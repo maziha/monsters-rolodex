@@ -1,0 +1,24 @@
+SELECT MONTH, 
+CASE 
+WHEN PATINDEX('%Search/Product/Shopping Cart%' ,Pattern)>0 THEN +1
+WHEN PATINDEX('%Search/Product/Product/Shopping Cart%' ,Pattern)>0 THEN +1
+WHEN PATINDEX('%Search/Product/Product/Product/Shopping Cart%' ,Pattern)>0 THEN +1
+WHEN PATINDEX('%Search/Product/Product/Product/Product/Shopping Cart%' ,Pattern)>0 THEN +1
+WHEN PATINDEX('%Search/Product/Product/Product/Product/Product/Shopping Cart%' ,Pattern)>0 THEN +1
+ELSE 0
+END AS NO_OF_VISITS_WITH_THE_PATTERN,
+CASE 
+WHEN PATINDEX('%Search/Product/Shopping Cart%' ,Pattern)>0 THEN '100%'
+WHEN PATINDEX('%Search/Product/Product/Shopping Cart%' ,Pattern)>0 THEN '100%'
+WHEN PATINDEX('%Search/Product/Product/Product/Shopping Cart%' ,Pattern)>0 THEN '100%'
+WHEN PATINDEX('%Search/Product/Product/Product/Product/Shopping Cart%' ,Pattern)>0 THEN '100%'
+WHEN PATINDEX('%Search/Product/Product/Product/Product/Product/Shopping Cart%' ,Pattern)>0 THEN '100%'
+ELSE '0%'
+END AS PERCENT_OF_OVERALL_VISITS
+FROM(
+SELECT FORMAT(DATE_TIME, 'MM-yyyy') Month, 
+STRING_AGG(PAGE_NAME, '/') Pattern , 
+YEAR(DATE_TIME) Year
+FROM PAGE_VISITS_DATA
+GROUP BY FORMAT(DATE_TIME, 'MM-yyyy'), YEAR(DATE_TIME)
+)a
